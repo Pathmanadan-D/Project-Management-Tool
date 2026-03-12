@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tasks — Project Management Tool</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+  <div id="navbar-placeholder"></div>
+  <div id="sidebar-placeholder"></div>
+
+  <main class="lg:pl-64 pt-14 lg:pt-16 min-h-screen">
+    <div class="p-4 lg:p-6">
+      <h1 class="text-2xl font-bold text-slate-900">Tasks</h1>
+      <p class="mt-1 text-slate-600">Drag cards between columns to update status.</p>
+
+      <!-- Kanban board -->
+      <div class="mt-8 flex gap-4 overflow-x-auto pb-4 min-h-[420px]">
+        <!-- To Do -->
+        <div class="kanban-column flex-shrink-0 w-72 rounded-xl border-2 border-slate-200 bg-slate-50/50 transition-colors" data-column="todo">
+          <div class="p-4 border-b border-slate-200 bg-white rounded-t-xl">
+            <h2 class="font-semibold text-slate-800">To Do</h2>
+            <span class="text-sm text-slate-500">3 tasks</span>
+          </div>
+          <div class="kanban-column-cards p-3 space-y-3 min-h-[320px]">
+            <div id="task-1" class="kanban-card bg-white rounded-lg border border-slate-200 p-4 shadow-sm cursor-grab hover:shadow-md transition-shadow" draggable="false">
+              <h3 class="font-medium text-slate-900">Design homepage mockups</h3>
+              <p class="mt-1 text-xs text-slate-500">Assigned to Alex</p>
+              <p class="mt-1 text-xs text-slate-500">Due Mar 15</p>
+              <span class="inline-block mt-2 px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">High</span>
+            </div>
+            <div id="task-2" class="kanban-card bg-white rounded-lg border border-slate-200 p-4 shadow-sm cursor-grab hover:shadow-md transition-shadow" draggable="false">
+              <h3 class="font-medium text-slate-900">Set up CI/CD pipeline</h3>
+              <p class="mt-1 text-xs text-slate-500">Assigned to Sam</p>
+              <p class="mt-1 text-xs text-slate-500">Due Mar 18</p>
+              <span class="inline-block mt-2 px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-700">Medium</span>
+            </div>
+            <div id="task-3" class="kanban-card bg-white rounded-lg border border-slate-200 p-4 shadow-sm cursor-grab hover:shadow-md transition-shadow" draggable="false">
+              <h3 class="font-medium text-slate-900">Write API documentation</h3>
+              <p class="mt-1 text-xs text-slate-500">Assigned to Jordan</p>
+              <p class="mt-1 text-xs text-slate-500">Due Mar 20</p>
+              <span class="inline-block mt-2 px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-700">Low</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- In Progress -->
+        <div class="kanban-column flex-shrink-0 w-72 rounded-xl border-2 border-slate-200 bg-slate-50/50 transition-colors" data-column="in-progress">
+          <div class="p-4 border-b border-slate-200 bg-white rounded-t-xl">
+            <h2 class="font-semibold text-slate-800">In Progress</h2>
+            <span class="text-sm text-slate-500">2 tasks</span>
+          </div>
+          <div class="kanban-column-cards p-3 space-y-3 min-h-[320px]">
+            <div id="task-4" class="kanban-card bg-white rounded-lg border border-slate-200 p-4 shadow-sm cursor-grab hover:shadow-md transition-shadow" draggable="false">
+              <h3 class="font-medium text-slate-900">API integration</h3>
+              <p class="mt-1 text-xs text-slate-500">Assigned to Taylor</p>
+              <p class="mt-1 text-xs text-slate-500">Due Mar 14</p>
+              <span class="inline-block mt-2 px-2 py-0.5 rounded text-xs font-medium bg-rose-100 text-rose-800">Urgent</span>
+            </div>
+            <div id="task-5" class="kanban-card bg-white rounded-lg border border-slate-200 p-4 shadow-sm cursor-grab hover:shadow-md transition-shadow" draggable="false">
+              <h3 class="font-medium text-slate-900">User authentication flow</h3>
+              <p class="mt-1 text-xs text-slate-500">Assigned to Morgan</p>
+              <p class="mt-1 text-xs text-slate-500">Due Mar 16</p>
+              <span class="inline-block mt-2 px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">High</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review -->
+        <div class="kanban-column flex-shrink-0 w-72 rounded-xl border-2 border-slate-200 bg-slate-50/50 transition-colors" data-column="review">
+          <div class="p-4 border-b border-slate-200 bg-white rounded-t-xl">
+            <h2 class="font-semibold text-slate-800">Review</h2>
+            <span class="text-sm text-slate-500">1 task</span>
+          </div>
+          <div class="kanban-column-cards p-3 space-y-3 min-h-[320px]">
+            <div id="task-6" class="kanban-card bg-white rounded-lg border border-slate-200 p-4 shadow-sm cursor-grab hover:shadow-md transition-shadow" draggable="false">
+              <h3 class="font-medium text-slate-900">Database schema review</h3>
+              <p class="mt-1 text-xs text-slate-500">Assigned to Casey</p>
+              <p class="mt-1 text-xs text-slate-500">Due Mar 12</p>
+              <span class="inline-block mt-2 px-2 py-0.5 rounded text-xs font-medium bg-violet-100 text-violet-800">Medium</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Done -->
+        <div class="kanban-column flex-shrink-0 w-72 rounded-xl border-2 border-slate-200 bg-slate-50/50 transition-colors" data-column="done">
+          <div class="p-4 border-b border-slate-200 bg-white rounded-t-xl">
+            <h2 class="font-semibold text-slate-800">Done</h2>
+            <span class="text-sm text-slate-500">2 tasks</span>
+          </div>
+          <div class="kanban-column-cards p-3 space-y-3 min-h-[320px]">
+            <div id="task-7" class="kanban-card bg-white rounded-lg border border-slate-200 p-4 shadow-sm cursor-grab hover:shadow-md transition-shadow opacity-90" draggable="false">
+              <h3 class="font-medium text-slate-900 line-through text-slate-500">Setup project repo</h3>
+              <p class="mt-1 text-xs text-slate-500">Assigned to Alex</p>
+              <p class="mt-1 text-xs text-slate-500">Due Mar 10</p>
+              <span class="inline-block mt-2 px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800">Done</span>
+            </div>
+            <div id="task-8" class="kanban-card bg-white rounded-lg border border-slate-200 p-4 shadow-sm cursor-grab hover:shadow-md transition-shadow opacity-90" draggable="false">
+              <h3 class="font-medium text-slate-900 line-through text-slate-500">Design system setup</h3>
+              <p class="mt-1 text-xs text-slate-500">Assigned to Sam</p>
+              <p class="mt-1 text-xs text-slate-500">Due Mar 8</p>
+              <span class="inline-block mt-2 px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800">Done</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/kanban.js"></script>
+</body>
+</html>

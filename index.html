@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Management Tool — Plan, Track, Deliver</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+  <!-- Nav -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-20">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">PM Tool</a>
+      <div class="flex items-center gap-3">
+        <a href="login.html" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">Log in</a>
+        <a href="register.html" class="inline-flex items-center px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors shadow-sm">Sign up</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-violet-50"></div>
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight">
+        Plan projects.<br />
+        <span class="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Track tasks. Ship faster.</span>
+      </h1>
+      <p class="mt-6 text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto">
+        A simple, modern project management tool for teams. Manage projects, assign tasks, and keep everyone aligned—all in one place.
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="register.html" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-500/25">Get started free</a>
+        <a href="login.html" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-xl border border-slate-300 text-slate-700 font-medium hover:bg-slate-50 transition-colors">Log in</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Description -->
+  <section class="py-16 sm:py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 text-center">Everything you need to deliver on time</h2>
+      <p class="mt-4 text-slate-600 text-center max-w-2xl mx-auto">
+        This prototype includes a full dashboard, project and task management, and team directory—styled with Tailwind CSS and ready to connect to a backend.
+      </p>
+      <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+          <div class="w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center mx-auto">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"/></svg>
+          </div>
+          <h3 class="mt-4 font-semibold text-slate-900">Dashboard</h3>
+          <p class="mt-2 text-sm text-slate-600">Overview, stats, and recent activity at a glance.</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+          <div class="w-12 h-12 rounded-xl bg-violet-100 text-violet-600 flex items-center justify-center mx-auto">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+          </div>
+          <h3 class="mt-4 font-semibold text-slate-900">Projects</h3>
+          <p class="mt-2 text-sm text-slate-600">Create projects with progress and team visibility.</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          </div>
+          <h3 class="mt-4 font-semibold text-slate-900">Kanban Tasks</h3>
+          <p class="mt-2 text-sm text-slate-600">Drag-and-drop boards: To Do → In Progress → Done.</p>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </div>
+          <h3 class="mt-4 font-semibold text-slate-900">Team</h3>
+          <p class="mt-2 text-sm text-slate-600">See roles, contacts, and who’s on each project.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16 bg-slate-900 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-2xl sm:text-3xl font-bold">Ready to get started?</h2>
+      <p class="mt-3 text-slate-300">Create an account and explore the dashboard in seconds.</p>
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="register.html" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-xl bg-white text-slate-900 font-semibold hover:bg-slate-100 transition-colors">Sign up free</a>
+        <a href="login.html" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-xl border border-slate-600 text-slate-200 font-medium hover:bg-slate-800 transition-colors">Log in</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-8 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center text-sm text-slate-500">
+      &copy; Project Management Tool. Frontend prototype.
+    </div>
+  </footer>
+</body>
+</html>
