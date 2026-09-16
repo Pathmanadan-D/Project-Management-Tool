@@ -8,7 +8,7 @@
       ],
       "env": {
         "SUPABASE_URL": "https://wqqyeebqtxlfqtnvseif.supabase.co",
-        "SUPABASE_SERVICE_ROLE_KEY": "sb_secret_CqAZLsenZhNtz1hsHIhggA_BHvDmcTj"
+        
       }
     }
   }
