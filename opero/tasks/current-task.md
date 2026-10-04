@@ -25,43 +25,43 @@ Never skip a priority. Never combine tasks into one prompt.
 
 ## Priority 1 — Project Foundation
 
-- [ ] Task 1.1 — Create Next.js project with TypeScript and App Router
-- [ ] Task 1.2 — Configure Tailwind CSS and verify it works
-- [ ] Task 1.3 — Install and initialise ShadCN UI. Add base components
-- [ ] Task 1.4 — Create Supabase project. Get project URL and anon key
-- [ ] Task 1.5 — Install Supabase packages
-- [ ] Task 1.6 — Create `.env.local` with Supabase credentials
-- [ ] Task 1.7 — Create Supabase server client and browser client
-- [ ] Task 1.8 — Verify Supabase connection works
+- [x] Task 1.1 — Create Next.js project with TypeScript and App Router
+- [x] Task 1.2 — Configure Tailwind CSS and verify it works
+- [x] Task 1.3 — Install and initialise ShadCN UI. Add base components
+- [x] Task 1.4 — Create Supabase project. Get project URL and anon key
+- [x] Task 1.5 — Install Supabase packages
+- [x] Task 1.6 — Create `.env.local` with Supabase credentials
+- [x] Task 1.7 — Create Supabase server client and browser client
+- [x] Task 1.8 — Verify Supabase connection works
 
 ---
 
 ## Foundation Verification
 
-[ ] Task F1 - Audit Foundation Setup Against Sprint 1 Requirements
+[x] Task F1 - Audit Foundation Setup Against Sprint 1 Requirements
 
 ---
 
 ## Priority 2 — Authentication Database
 
-- [ ] Task 2.1 — Enable Supabase Auth in dashboard
-- [ ] Task 2.2 — Configure email verification settings
-- [ ] Task 2.3 — Configure Google OAuth provider
-- [ ] Task 2.4 — Create `profiles` table
-- [ ] Task 2.5 — Enable RLS on profiles table
-- [ ] Task 2.6 — Create RLS policy — select own profile
-- [ ] Task 2.7 — Create RLS policy — insert own profile
-- [ ] Task 2.8 — Create RLS policy — update own profile
-- [ ] Task 2.9 — Create auto-insert trigger
-- [ ] Task 2.10 — Test database structure
+- [x] Task 2.1 — Enable Supabase Auth in dashboard
+- [x] Task 2.2 — Configure email verification settings
+- [x] Task 2.3 — Configure Google OAuth provider
+- [x] Task 2.4 — Create `profiles` table
+- [x] Task 2.5 — Enable RLS on profiles table
+- [x] Task 2.6 — Create RLS policy — select own profile
+- [x] Task 2.7 — Create RLS policy — insert own profile
+- [x] Task 2.8 — Create RLS policy — update own profile
+- [x] Task 2.9 — Create auto-insert trigger
+- [x] Task 2.10 — Test database structure
 
 ---
 
 ## Priority 3 — Project Architecture
 
-- [ ] Task 3.1 — Create App Router folder structure
-- [ ] Task 3.2 — Create all route folders
-- [ ] Task 3.3 — Create dashboard placeholder page
+- [x] Task 3.1 — Create App Router folder structure
+- [x] Task 3.2 — Create all route folders
+- [x] Task 3.3 — Create dashboard placeholder page
 - [ ] Task 3.4 — Create shared Auth Layout
 - [ ] Task 3.5 — Add basic page.tsx placeholder in every route folder
 - [ ] Task 3.6 — Create skeleton middleware.ts
