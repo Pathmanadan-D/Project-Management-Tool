@@ -62,11 +62,11 @@ Never skip a priority. Never combine tasks into one prompt.
 - [x] Task 3.1 — Create App Router folder structure
 - [x] Task 3.2 — Create all route folders
 - [x] Task 3.3 — Create dashboard placeholder page
-- [ ] Task 3.4 — Create shared Auth Layout
-- [ ] Task 3.5 — Add basic page.tsx placeholder in every route folder
-- [ ] Task 3.6 — Create skeleton middleware.ts
-- [ ] Task 3.7 — Create skeleton protected route logic
-- [ ] Task 3.8 — Create auth helper functions
+- [x] Task 3.4 — Create shared Auth Layout
+- [x] Task 3.5 — Add basic page.tsx placeholder in every route folder
+- [x] Task 3.6 — Create skeleton middleware.ts
+- [x] Task 3.7 — Create skeleton protected route logic
+- [x] Task 3.8 — Create auth helper functions
 - [ ] Task 3.9 — Verify all routes resolve in browser
 
 ---
