@@ -67,9 +67,9 @@ Never skip a priority. Never combine tasks into one prompt.
 - [x] Task 3.6 — Create skeleton middleware.ts
 - [x] Task 3.7 — Create skeleton protected route logic
 - [x] Task 3.8 — Create auth helper functions
-- [ ] Task 3.9 — Verify all routes resolve in browser
+- [x] Task 3.9 — Verify all routes resolve in browser
 
----
+--- 
 
 ## Priority 4 — Registration Module
 
