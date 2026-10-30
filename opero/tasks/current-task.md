@@ -73,7 +73,7 @@ Never skip a priority. Never combine tasks into one prompt.
 
 ## Priority 4 — Registration Module
 
-- [ ] Task 4.1 — Build Register form UI
+- [x] Task 4.1 — Build Register form UI
 - [ ] Task 4.2 — Add password strength bar
 - [ ] Task 4.3 — Add confirm password match indicator
 - [ ] Task 4.4 — Add client-side validation
