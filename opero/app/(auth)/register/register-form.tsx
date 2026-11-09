@@ -8,6 +8,61 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+type PasswordStrength = "weak" | "medium" | "strong";
+
+interface PasswordStrengthPresentation {
+  label: "Weak" | "Medium" | "Strong";
+  barClassName: string;
+  labelClassName: string;
+  widthClassName: string;
+  value: number;
+}
+
+const PASSWORD_STRENGTH_PRESENTATION: Record<
+  PasswordStrength,
+  PasswordStrengthPresentation
+> = {
+  weak: {
+    label: "Weak",
+    barClassName: "bg-red-500",
+    labelClassName: "text-red-500",
+    widthClassName: "w-1/3",
+    value: 1,
+  },
+  medium: {
+    label: "Medium",
+    barClassName: "bg-yellow-500",
+    labelClassName: "text-yellow-500",
+    widthClassName: "w-2/3",
+    value: 2,
+  },
+  strong: {
+    label: "Strong",
+    barClassName: "bg-green-500",
+    labelClassName: "text-green-500",
+    widthClassName: "w-full",
+    value: 3,
+  },
+};
+
+function getPasswordStrength(password: string): PasswordStrength {
+  const meetsStrongRequirements =
+    password.length >= 8 &&
+    /[A-Z]/.test(password) &&
+    /[0-9]/.test(password) &&
+    /[^A-Za-z0-9]/.test(password);
+
+  if (meetsStrongRequirements) {
+    return "strong";
+  }
+
+  if (password.length < 6) {
+    return "weak";
+  }
+
+  return "medium";
+}
+
 export function RegisterForm() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -15,6 +70,11 @@ export function RegisterForm() {
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState<boolean>(false);
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState<boolean>(false);
+  const passwordStrength =
+    password.length > 0 ? getPasswordStrength(password) : null;
+  const passwordStrengthPresentation = passwordStrength
+    ? PASSWORD_STRENGTH_PRESENTATION[passwordStrength]
+    : null;
 
   return (
     <form
@@ -71,6 +131,27 @@ export function RegisterForm() {
             {isPasswordVisible ? <Eye /> : <EyeOff />}
           </Button>
         </div>
+        {passwordStrengthPresentation ? (
+          <div className="flex flex-col gap-1.5">
+            <div
+              className="h-1.5 w-full overflow-hidden rounded-full bg-border"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={3}
+              aria-valuenow={passwordStrengthPresentation.value}
+              aria-label={`Password strength: ${passwordStrengthPresentation.label}`}
+            >
+              <div
+                className={`h-full rounded-full transition-all duration-200 ${passwordStrengthPresentation.barClassName} ${passwordStrengthPresentation.widthClassName}`}
+              />
+            </div>
+            <p
+              className={`text-xs font-medium ${passwordStrengthPresentation.labelClassName}`}
+            >
+              {passwordStrengthPresentation.label}
+            </p>
+          </div>
+        ) : null}
       </div>
 
       <div className="flex flex-col gap-1.5">

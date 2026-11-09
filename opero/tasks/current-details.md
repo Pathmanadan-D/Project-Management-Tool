@@ -630,22 +630,59 @@ Register form renders correctly. All fields visible. No backend connection yet.
 
 ### Task 4.2 — Add password strength bar
 
-Goal:
+**Goal:**
+
 Show real-time password strength feedback as the user types.
 
-Requirements:
-Strength levels:
-- Weak (red) — less than 6 characters
-- Medium (yellow) — 6+ characters, missing uppercase or number or special character
-- Strong (green) — 8+ characters, has uppercase, number, and special character
+**1\. Password Strength Calculation**
 
-Behaviour:
-- Bar updates in real time as user types — no submit needed
-- Color changes: red → yellow → green
-- Label shows: "Weak" / "Medium" / "Strong"
+Implement the following exact strength levels:
 
-Output:
-Password strength bar renders and updates correctly as user types
+* **Weak (Red):** Password contains fewer than 6 characters.  
+* **Medium (Yellow):** Password contains at least 6 characters but does not satisfy all Strong requirements.  
+* **Strong (Green):** Password contains at least 8 characters, at least one uppercase letter, at least one number, and at least one special character.
+
+**Calculation priority:**
+
+* First, check whether the password satisfies all Strong requirements. If so, classify it as Strong.  
+* Otherwise, if the password contains fewer than 6 characters, classify it as Weak.  
+* Otherwise, classify it as Medium.
+
+**2\. UI Requirements**
+
+* Display a password strength bar directly below the Password input.  
+* Display the corresponding strength label: `Weak`, `Medium`, or `Strong`.  
+* Use red for Weak, yellow for Medium, and green for Strong.  
+* The bar and label must update immediately as the user types.  
+* No submit action should be required.  
+* The strength indicator must respond only to the Password field, not the Confirm Password field.  
+* When the Password field is empty, hide the strength bar and label.  
+* Ensure the strength indicator continues working when the existing password visibility toggle is used.  
+* Follow the existing Opero design system and registration form styling.  
+* Keep the existing registration form layout unchanged apart from adding the strength indicator.
+
+**3\. Output**
+
+* Password strength bar renders correctly below the Password input.  
+* Strength calculation follows the exact rules above.  
+* Bar color and label update correctly in real time.  
+* Empty password does not display strength feedback.  
+* Existing password visibility functionality continues working.
+
+**4\. Restrictions**
+
+* Do not implement password validation or validation error messages.  
+* Do not implement the confirm password match indicator.  
+* Do not modify the Confirm Password field behavior.  
+* No server actions or Supabase calls.  
+* No OAuth logic.  
+* No form submission behavior.  
+* Do not modify the shared Auth Layout or unrelated files.  
+* Do not implement Tasks 4.3–4.12.  
+* Do not rebuild or redesign the registration form.  
+* Implement only Task 4.2.
+
+
 
 ---
 
