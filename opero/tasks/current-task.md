@@ -69,7 +69,7 @@ Never skip a priority. Never combine tasks into one prompt.
 - [x] Task 3.8 — Create auth helper functions
 - [x] Task 3.9 — Verify all routes resolve in browser
 
----
+--- 
 
 ## Priority 4 — Registration Module
 
