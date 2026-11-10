@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Check, Eye, EyeOff, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -63,25 +63,133 @@ function getPasswordStrength(password: string): PasswordStrength {
   return "medium";
 }
 
+interface RegisterFormValues {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  hasAcceptedTerms: boolean;
+}
+
+interface RegisterFormErrors {
+  fullName?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  terms?: string;
+}
+
+function isValidEmailFormat(email: string): boolean {
+  const atIndex = email.indexOf("@");
+  if (atIndex <= 0) {
+    return false;
+  }
+
+  const domain = email.slice(atIndex + 1);
+  const domainParts = domain.split(".");
+
+  return domainParts.length >= 2 && domainParts.every((part) => part.length > 0);
+}
+
+function getRegisterFormErrors(values: RegisterFormValues): RegisterFormErrors {
+  const errors: RegisterFormErrors = {};
+  const trimmedFullName = values.fullName.trim();
+  const trimmedEmail = values.email.trim();
+
+  if (!trimmedFullName) {
+    errors.fullName = "Full name is required";
+  }
+
+  if (!trimmedEmail) {
+    errors.email = "Email address is required";
+  } else if (!isValidEmailFormat(trimmedEmail)) {
+    errors.email = "Enter a valid email address";
+  }
+
+  if (!values.password) {
+    errors.password = "Password is required";
+  } else if (getPasswordStrength(values.password) === "weak") {
+    errors.password = "Password must be medium strength or stronger";
+  }
+
+  if (!values.confirmPassword) {
+    errors.confirmPassword = "Please confirm your password";
+  } else if (values.confirmPassword !== values.password) {
+    errors.confirmPassword = "Passwords don't match";
+  }
+
+  if (!values.hasAcceptedTerms) {
+    errors.terms = "You must agree to the Terms of Service";
+  }
+
+  return errors;
+}
+
+interface FieldErrorMessageProps {
+  id: string;
+  message: string | undefined;
+}
+
+function FieldErrorMessage({ id, message }: FieldErrorMessageProps) {
+  if (!message) {
+    return null;
+  }
+
+  return (
+    <p id={id} className="text-xs font-medium text-red-500" role="alert">
+      {message}
+    </p>
+  );
+}
+
 export function RegisterForm() {
+  const [fullName, setFullName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState<boolean>(false);
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState<boolean>(false);
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState<boolean>(false);
+  const [fieldErrors, setFieldErrors] = useState<RegisterFormErrors>({});
   const passwordStrength =
     password.length > 0 ? getPasswordStrength(password) : null;
   const passwordStrengthPresentation = passwordStrength
     ? PASSWORD_STRENGTH_PRESENTATION[passwordStrength]
     : null;
+  const hasStartedConfirmPassword = confirmPassword.length > 0;
+  const doPasswordsMatch = password === confirmPassword;
+
+  function getCurrentValues(): RegisterFormValues {
+    return {
+      fullName,
+      email,
+      password,
+      confirmPassword,
+      hasAcceptedTerms,
+    };
+  }
+
+  function updateFieldErrors(nextValues: RegisterFormValues): void {
+    if (!hasAttemptedSubmit) {
+      return;
+    }
+
+    setFieldErrors(getRegisterFormErrors(nextValues));
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    setHasAttemptedSubmit(true);
+    setFieldErrors(getRegisterFormErrors(getCurrentValues()));
+  }
 
   return (
     <form
       className="flex flex-col gap-4"
-      onSubmit={(event) => {
-        event.preventDefault();
-      }}
+      noValidate
+      onSubmit={handleSubmit}
     >
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="full-name">Full Name</Label>
@@ -91,8 +199,22 @@ export function RegisterForm() {
           type="text"
           placeholder="Jane Smith"
           autoComplete="name"
+          value={fullName}
+          onChange={(event) => {
+            const nextFullName = event.target.value;
+            setFullName(nextFullName);
+            updateFieldErrors({
+              ...getCurrentValues(),
+              fullName: nextFullName,
+            });
+          }}
+          aria-invalid={Boolean(fieldErrors.fullName)}
+          aria-describedby={
+            fieldErrors.fullName ? "full-name-error" : undefined
+          }
           className="h-10"
         />
+        <FieldErrorMessage id="full-name-error" message={fieldErrors.fullName} />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -103,8 +225,20 @@ export function RegisterForm() {
           type="email"
           placeholder="you@example.com"
           autoComplete="email"
+          value={email}
+          onChange={(event) => {
+            const nextEmail = event.target.value;
+            setEmail(nextEmail);
+            updateFieldErrors({
+              ...getCurrentValues(),
+              email: nextEmail,
+            });
+          }}
+          aria-invalid={Boolean(fieldErrors.email)}
+          aria-describedby={fieldErrors.email ? "email-error" : undefined}
           className="h-10"
         />
+        <FieldErrorMessage id="email-error" message={fieldErrors.email} />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -115,9 +249,20 @@ export function RegisterForm() {
             name="password"
             type={isPasswordVisible ? "text" : "password"}
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) => {
+              const nextPassword = event.target.value;
+              setPassword(nextPassword);
+              updateFieldErrors({
+                ...getCurrentValues(),
+                password: nextPassword,
+              });
+            }}
             placeholder="Enter your password"
             autoComplete="new-password"
+            aria-invalid={Boolean(fieldErrors.password)}
+            aria-describedby={
+              fieldErrors.password ? "password-error" : undefined
+            }
             className="h-10 pr-10"
           />
           <Button
@@ -152,6 +297,7 @@ export function RegisterForm() {
             </p>
           </div>
         ) : null}
+        <FieldErrorMessage id="password-error" message={fieldErrors.password} />
       </div>
 
       <div className="flex flex-col gap-1.5">
@@ -162,9 +308,22 @@ export function RegisterForm() {
             name="confirmPassword"
             type={isConfirmPasswordVisible ? "text" : "password"}
             value={confirmPassword}
-            onChange={(event) => setConfirmPassword(event.target.value)}
+            onChange={(event) => {
+              const nextConfirmPassword = event.target.value;
+              setConfirmPassword(nextConfirmPassword);
+              updateFieldErrors({
+                ...getCurrentValues(),
+                confirmPassword: nextConfirmPassword,
+              });
+            }}
             placeholder="Confirm your password"
             autoComplete="new-password"
+            aria-invalid={Boolean(fieldErrors.confirmPassword)}
+            aria-describedby={
+              fieldErrors.confirmPassword
+                ? "confirm-password-error"
+                : undefined
+            }
             className="h-10 pr-10"
           />
           <Button
@@ -184,39 +343,67 @@ export function RegisterForm() {
             {isConfirmPasswordVisible ? <Eye /> : <EyeOff />}
           </Button>
         </div>
+        {hasStartedConfirmPassword ? (
+          <p
+            className={`flex items-center gap-1.5 text-xs font-medium ${
+              doPasswordsMatch ? "text-green-500" : "text-red-500"
+            }`}
+            aria-live="polite"
+          >
+            {doPasswordsMatch ? (
+              <Check className="size-3.5" aria-hidden="true" />
+            ) : (
+              <X className="size-3.5" aria-hidden="true" />
+            )}
+            {doPasswordsMatch ? "Passwords match" : "Passwords don't match"}
+          </p>
+        ) : null}
+        <FieldErrorMessage
+          id="confirm-password-error"
+          message={fieldErrors.confirmPassword}
+        />
       </div>
 
-      <div className="flex items-start gap-2 text-sm text-muted-foreground">
-        <Checkbox
-          id="accept-terms"
-          name="acceptTerms"
-          checked={hasAcceptedTerms}
-          onCheckedChange={(checked) => {
-            setHasAcceptedTerms(checked === true);
-          }}
-          className="mt-0.5"
-          aria-labelledby="accept-terms-label"
-        />
-        <Label
-          id="accept-terms-label"
-          htmlFor="accept-terms"
-          className="font-normal text-muted-foreground"
-        >
-          I agree to the{" "}
-          <Link
-            href="/terms-of-service"
-            className="font-medium text-[#3B82F6] hover:text-[#2563EB] hover:underline"
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-start gap-2 text-sm text-muted-foreground">
+          <Checkbox
+            id="accept-terms"
+            name="acceptTerms"
+            checked={hasAcceptedTerms}
+            onCheckedChange={(checked) => {
+              const nextHasAcceptedTerms = checked === true;
+              setHasAcceptedTerms(nextHasAcceptedTerms);
+              updateFieldErrors({
+                ...getCurrentValues(),
+                hasAcceptedTerms: nextHasAcceptedTerms,
+              });
+            }}
+            className="mt-0.5"
+            aria-labelledby="accept-terms-label"
+            aria-invalid={Boolean(fieldErrors.terms)}
+            aria-describedby={fieldErrors.terms ? "terms-error" : undefined}
+          />
+          <Label
+            id="accept-terms-label"
+            htmlFor="accept-terms"
+            className="font-normal text-muted-foreground"
           >
-            Terms of Service
-          </Link>
-        </Label>
+            I agree to the{" "}
+            <Link
+              href="/terms-of-service"
+              className="font-medium text-[#3B82F6] hover:text-[#2563EB] hover:underline"
+            >
+              Terms of Service
+            </Link>
+          </Label>
+        </div>
+        <FieldErrorMessage id="terms-error" message={fieldErrors.terms} />
       </div>
 
       <Button
-        type="button"
+        type="submit"
         size="lg"
-        disabled={!hasAcceptedTerms}
-        className="mt-1 w-full bg-[#3B82F6] text-white hover:bg-[#2563EB] disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
+        className="mt-1 w-full bg-[#3B82F6] text-white hover:bg-[#2563EB]"
       >
         Create Account
       </Button>

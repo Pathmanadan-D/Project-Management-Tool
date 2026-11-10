@@ -689,40 +689,68 @@ Implement the following exact strength levels:
 ### Task 4.3 — Add confirm password match indicator
 
 Goal:
-Show real-time feedback on whether the confirm password field matches.
+Show real-time feedback on whether the Confirm Password field matches the Password field.
 
 Requirements:
-- Updates in real time as user types in either password field
-- Match: green checkmark + "Passwords match"
-- No match: red X + "Passwords don't match"
-- No indicator shown until user starts typing in confirm field
+Update in real time when the user types in either Password or Confirm Password field.
+When both passwords match: show a green checkmark + "Passwords match".
+When passwords do not match: show a red X + "Passwords don't match".
+Do not show any indicator until the user starts typing in the Confirm Password field.
+If either password changes, update the match indicator immediately.
+Preserve the existing registration form layout and Opero design system.
 
 Output:
-Match indicator renders and updates correctly in real time
+Match indicator renders correctly.
+Indicator updates in real time when either password field changes.
+Correct green checkmark and red X states are displayed.
+No indicator is displayed before the user starts typing in the Confirm Password field.
+
+Restrictions:
+Do not implement form validation or validation error messages.
+No server actions or Supabase calls.
+No OAuth logic.
+No form submission behavior.
+Do not modify the shared Auth Layout or unrelated files.
+Do not implement Tasks 4.4–4.12.
+Implement Task 4.3 only.
 
 ---
 
 ### Task 4.4 — Add client-side validation
 
+Task 4.4 — Add Client-Side Validation
 Goal:
-Validate all fields before allowing form submission.
-
+Validate all registration form fields before allowing form submission.
 Requirements:
-Validate on submit:
-- Full name: not empty
-- Email: not empty, valid format (must contain @ and domain)
-- Password: not empty, must meet minimum strength (medium or above)
-- Confirm password: must match password
-- Terms checkbox: must be checked
-
-Error display:
-- Red border on invalid field
-- Error message below the field
-- All errors shown at once on submit attempt
-- Errors clear when user corrects the field
-
+Validate the following fields when the user attempts to submit the form:
+Full Name: Must not be empty.
+Email: Must not be empty and must have a valid email format (must contain @ and a domain).
+Password: Must not be empty and must meet the minimum password strength requirement (Medium or above, based on Task 4.2).
+Confirm Password: Must match the Password field.
+Terms Checkbox: Must be checked.
+Error Display:
+Show a red border around each invalid field.
+Display a clear error message directly below each invalid field.
+Display all applicable validation errors together after a submit attempt.
+Clear the corresponding error when the user corrects that field.
+Update validation feedback appropriately when the user changes either password field or the Terms checkbox.
+Preserve the existing registration form layout and Opero design system.
 Output:
-Form validates correctly. Invalid submissions are blocked with clear error messages.
+All five registration fields are validated correctly.
+All applicable errors appear together after a submit attempt.
+Invalid form submissions are blocked.
+Error messages and red borders clear when the corresponding fields are corrected.
+Valid form data passes client-side validation.
+Restrictions:
+Implement client-side validation only.
+Do not connect the form to a backend or server action.
+No Supabase calls.
+No OAuth logic.
+Do not implement actual registration or form submission behavior.
+Do not modify the shared Auth Layout or unrelated files.
+Do not implement Tasks 4.5–4.12.
+Preserve the existing password strength bar and confirm password match indicator.
+Implement Task 4.4 only.
 
 ---
 
