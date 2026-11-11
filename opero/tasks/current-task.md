@@ -76,7 +76,7 @@ Never skip a priority. Never combine tasks into one prompt.
 - [x] Task 4.1 — Build Register form UI
 - [x] Task 4.2 — Add password strength bar
 - [x] Task 4.3 — Add confirm password match indicator
-- [ ] Task 4.4 — Add client-side validation
+- [x] Task 4.4 — Add client-side validation
 - [ ] Task 4.5 — Create signUp server action
 - [ ] Task 4.6 — Connect Register form to server action
 - [ ] Task 4.7 — Build Check Inbox state

@@ -181,6 +181,11 @@ export function RegisterForm() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
+
+    if (!hasAcceptedTerms) {
+      return;
+    }
+
     setHasAttemptedSubmit(true);
     setFieldErrors(getRegisterFormErrors(getCurrentValues()));
   }
@@ -403,7 +408,8 @@ export function RegisterForm() {
       <Button
         type="submit"
         size="lg"
-        className="mt-1 w-full bg-[#3B82F6] text-white hover:bg-[#2563EB]"
+        disabled={!hasAcceptedTerms}
+        className="mt-1 w-full bg-[#3B82F6] text-white hover:bg-[#2563EB] disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
       >
         Create Account
       </Button>
