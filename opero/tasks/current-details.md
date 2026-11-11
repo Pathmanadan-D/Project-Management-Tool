@@ -757,21 +757,45 @@ Implement Task 4.4 only.
 ### Task 4.5 — Create signUp server action
 
 Goal:
-Create the server action that handles user registration with Supabase Auth.
-
+Create a server action that handles user registration using Supabase Auth.
 Requirements:
-- Create `/actions/auth/sign-up.ts`
-- Accept: full_name, email, password
-- Call `supabase.auth.signUp()` with email, password, and full_name in metadata
-- Return `{ success: true }` on success
-- Return `{ success: false, error: string }` on failure
-- Handle: email already registered error
-- Use explicit TypeScript types — no `any`
-- Never expose raw Supabase error messages to the client
-- After successful signup,set emailRedirectTo to: ${process.env.NEXT_PUBLIC_SITE_URL}/verify-email
-
+Create the server action file at /actions/auth/sign-up.ts.
+Add the "use server" directive at the top of the file.
+Accept the following registration data:
+full_name
+email
+password
+Use explicit TypeScript types for input and return values. Do not use any.
+Use the existing Supabase server client from the project's established Supabase setup.
+Call supabase.auth.signUp() with:
+email
+password
+options.data.full_name containing the user's full name.
+Set emailRedirectTo to ${process.env.NEXT_PUBLIC_SITE_URL}/verify-email.
+Return { success: true } when registration succeeds.
+Return { success: false, error: string } when registration fails.
+Handle the email-already-registered error with a clear, user-friendly message.
+Handle other registration errors without exposing raw Supabase error messages to the client.
+Keep sensitive operations and Supabase error handling on the server side.
 Output:
-signUp server action exists and handles registration correctly
+sign-up.ts server action is created successfully.
+Registration data is accepted with explicit TypeScript types.
+Supabase Auth signup is called with the correct email, password, and full-name metadata.
+Email verification redirect URL is configured correctly.
+Success and failure responses follow the specified return structure.
+Existing Supabase server client setup is reused.
+Restrictions:
+Create only the signUp server action.
+Do not connect the Register Form to this action yet.
+No form submission integration.
+No OAuth implementation.
+Do not modify the existing registration UI.
+Do not modify the shared Auth Layout or unrelated files.
+Do not expose raw Supabase error messages.
+Do not create or modify database tables, triggers, or RLS policies.
+Do not implement Tasks 4.6–4.12.
+Implement Task 4.5 only.
+
 
 ---
 
