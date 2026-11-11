@@ -77,8 +77,8 @@ Never skip a priority. Never combine tasks into one prompt.
 - [x] Task 4.2 — Add password strength bar
 - [x] Task 4.3 — Add confirm password match indicator
 - [x] Task 4.4 — Add client-side validation
-- [ ] Task 4.5 — Create signUp server action
-- [ ] Task 4.6 — Connect Register form to server action
+- [x] Task 4.5 — Create signUp server action
+- [x] Task 4.6 — Connect Register form to server action
 - [ ] Task 4.7 — Build Check Inbox state
 - [ ] Task 4.8 — Build Resend Email button with cooldown timer
 - [ ] Task 4.9 — Add "Use a different email" link

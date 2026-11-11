@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { Check, Eye, EyeOff, X } from "lucide-react";
+import { signUpAction } from "@/actions/auth/sign-up";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -153,6 +154,10 @@ export function RegisterForm() {
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState<boolean>(false);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState<boolean>(false);
   const [fieldErrors, setFieldErrors] = useState<RegisterFormErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [submittedEmail, setSubmittedEmail] = useState<string>("");
+  const isSubmittingRef = useRef<boolean>(false);
   const passwordStrength =
     password.length > 0 ? getPasswordStrength(password) : null;
   const passwordStrengthPresentation = passwordStrength
@@ -179,15 +184,53 @@ export function RegisterForm() {
     setFieldErrors(getRegisterFormErrors(nextValues));
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> {
     event.preventDefault();
+
+    if (isSubmittingRef.current) {
+      return;
+    }
+
+    setServerError(null);
 
     if (!hasAcceptedTerms) {
       return;
     }
 
     setHasAttemptedSubmit(true);
-    setFieldErrors(getRegisterFormErrors(getCurrentValues()));
+    const nextFieldErrors = getRegisterFormErrors(getCurrentValues());
+    setFieldErrors(nextFieldErrors);
+
+    if (Object.keys(nextFieldErrors).length > 0) {
+      return;
+    }
+
+    isSubmittingRef.current = true;
+    setIsSubmitting(true);
+
+    try {
+      const result = await signUpAction({
+        full_name: fullName,
+        email,
+        password,
+      });
+
+      if (!result.success) {
+        setServerError(result.error);
+        return;
+      }
+
+      setSubmittedEmail(email.trim());
+    } finally {
+      isSubmittingRef.current = false;
+      setIsSubmitting(false);
+    }
+  }
+
+  if (submittedEmail) {
+    return null;
   }
 
   return (
@@ -405,14 +448,21 @@ export function RegisterForm() {
         <FieldErrorMessage id="terms-error" message={fieldErrors.terms} />
       </div>
 
-      <Button
-        type="submit"
-        size="lg"
-        disabled={!hasAcceptedTerms}
-        className="mt-1 w-full bg-[#3B82F6] text-white hover:bg-[#2563EB] disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
-      >
-        Create Account
-      </Button>
+      <div className="mt-1 flex flex-col gap-1.5">
+        <Button
+          type="submit"
+          size="lg"
+          disabled={!hasAcceptedTerms || isSubmitting}
+          className="w-full bg-[#3B82F6] text-white hover:bg-[#2563EB] disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
+        >
+          {isSubmitting ? "Creating account..." : "Create Account"}
+        </Button>
+        {serverError ? (
+          <p className="text-xs font-medium text-red-500" role="alert">
+            {serverError}
+          </p>
+        ) : null}
+      </div>
 
       <div className="flex items-center gap-3">
         <div className="h-px flex-1 bg-border" />
