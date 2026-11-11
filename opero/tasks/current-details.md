@@ -757,58 +757,141 @@ Implement Task 4.4 only.
 ### Task 4.5 — Create signUp server action
 
 Goal:
-Create the server action that handles user registration with Supabase Auth.
-
+Create a server action that handles user registration using Supabase Auth.
 Requirements:
-- Create `/actions/auth/sign-up.ts`
-- Accept: full_name, email, password
-- Call `supabase.auth.signUp()` with email, password, and full_name in metadata
-- Return `{ success: true }` on success
-- Return `{ success: false, error: string }` on failure
-- Handle: email already registered error
-- Use explicit TypeScript types — no `any`
-- Never expose raw Supabase error messages to the client
-- After successful signup,set emailRedirectTo to: ${process.env.NEXT_PUBLIC_SITE_URL}/verify-email
-
+Create the server action file at /actions/auth/sign-up.ts.
+Add the "use server" directive at the top of the file.
+Accept the following registration data:
+full_name
+email
+password
+Use explicit TypeScript types for input and return values. Do not use any.
+Use the existing Supabase server client from the project's established Supabase setup.
+Call supabase.auth.signUp() with:
+email
+password
+options.data.full_name containing the user's full name.
+Set emailRedirectTo to ${process.env.NEXT_PUBLIC_SITE_URL}/verify-email.
+Return { success: true } when registration succeeds.
+Return { success: false, error: string } when registration fails.
+Handle the email-already-registered error with a clear, user-friendly message.
+Handle other registration errors without exposing raw Supabase error messages to the client.
+Keep sensitive operations and Supabase error handling on the server side.
 Output:
-signUp server action exists and handles registration correctly
+sign-up.ts server action is created successfully.
+Registration data is accepted with explicit TypeScript types.
+Supabase Auth signup is called with the correct email, password, and full-name metadata.
+Email verification redirect URL is configured correctly.
+Success and failure responses follow the specified return structure.
+Existing Supabase server client setup is reused.
+Restrictions:
+Create only the signUp server action.
+Do not connect the Register Form to this action yet.
+No form submission integration.
+No OAuth implementation.
+Do not modify the existing registration UI.
+Do not modify the shared Auth Layout or unrelated files.
+Do not expose raw Supabase error messages.
+Do not create or modify database tables, triggers, or RLS policies.
+Do not implement Tasks 4.6–4.12.
+Implement Task 4.5 only.
+
 
 ---
 
 ### Task 4.6 — Connect Register form to server action
 
 Goal:
-Wire the register form to the signUp server action.
+Connect the existing Register Form to the signUp server action and handle the registration process.
 
 Requirements:
-- Call signUp action on form submit (after client-side validation passes)
-- Loading state: button text changes to "Creating account..." and is disabled
-- On success: swap card to Check Inbox state (Task 4.7)
-- On error: show error message below the button
-- Error: "An account with this email already exists" if email is taken
+Import and call the existing signUp server action from /actions/auth/sign-up.ts.
+Call the server action only after all client-side validation from Task 4.4 passes.
+Pass the following values to the server action:
+full_name
+email
+password
+Handle the server action's success and failure responses correctly.
+Display a loading state while the registration request is processing:
+Change Create Account button text to Creating account....
+Disable the button while processing.
+Prevent duplicate submissions.
+
+On successful registration:
+Store the submitted email for the Check Inbox screen.
+Swap the existing registration card content to the Check Inbox state (Task 4.7).
+Do not navigate to another page.
+
+On registration failure:
+Display a clear error message below the Create Account button.
+If the email is already registered, display exactly: An account with this email already exists.
+Display other server errors using the safe error message returned by the server action.
+Clear the previous server error when the user makes another submission attempt.
+Preserve the existing registration form UI, password strength bar, confirm password match indicator, and client-side validation.
 
 Output:
-Register form submits to Supabase. Loading state works. Errors display correctly.
+Register Form successfully calls the signUp server action after client-side validation passes.
+Registration data is submitted correctly to Supabase Auth.
+Loading state works correctly.
+Duplicate submissions are prevented while processing.
+Successful registration switches to the Check Inbox state without page navigation.
+Registration errors display correctly below the button.
+Existing registration UI and functionality remain intact.
+
+Restrictions:
+Use the existing signUp server action from Task 4.5.
+Do not duplicate the Supabase signup logic in the Register Form.
+Do not bypass or remove Task 4.4 client-side validation.
+Do not implement the Check Inbox screen itself; use the state transition needed for Task 4.7.
+Do not implement resend email functionality.
+No Google OAuth implementation.
+Do not modify the shared Auth Layout or unrelated files.
+Do not modify database tables, triggers, or RLS policies.
+Do not implement Tasks 4.7–4.12.
+Implement Task 4.6 only.
+
 
 ---
 
 ### Task 4.7 — Build Check Inbox state
 
 Goal:
-After successful registration, swap the card content to the Check Inbox screen.
+Display a Check Inbox screen inside the existing Auth Card after successful registration.
 
 Requirements:
-- No page navigation — card content swaps in place
-- Show: envelope icon
-- Show: "Check your inbox!" title
-- Show: "We sent a verification link to:" + email address in bold
-- Show: "Click the link in the email to continue setting up your account"
-- Show: "Link expires in 24 hours"
-- Show: Resend Email button (Task 4.8)
-- Show: "Use a different email" link (Task 4.9)
+After successful registration (Task 4.6), replace the registration form content with the Check Inbox screen.
+Do not navigate to another page. Swap the card content in place.
+Display an envelope icon.
+Display the title: Check your inbox!
+Display the message: We sent a verification link to:
+Display the submitted email address in bold.
+Display the message: Click the link in the email to continue setting up your account.
+Display: Link expires in 24 hours.
+Display a Resend Email button (functionality will be implemented in Task 4.8).
+Display a Use a different email link (functionality will be implemented in Task 4.9).
+Use the email address stored during the successful registration in Task 4.6.
+Follow the existing Opero design system and authentication page styling.
+Keep the Check Inbox screen clean, minimal, professional, and responsive.
+Ensure the screen works correctly inside the existing shared Auth Layout.
 
 Output:
-Card swaps to Check Inbox state after successful form submission
+Check Inbox screen renders after successful registration.
+Registration form content is replaced by the Check Inbox content.
+Submitted email address is displayed correctly in bold.
+All required messages and UI elements are visible.
+No page navigation occurs during the transition.
+Existing Auth Card styling and shared Auth Layout remain intact.
+
+Restrictions:
+Do not modify the existing registration flow unnecessarily.
+Do not implement resend email functionality; only display the button.
+Do not implement the Use a different email functionality; only display the link.
+Do not add new Supabase calls.
+No Google OAuth implementation.
+Do not modify the shared Auth Layout or unrelated files.
+Do not implement Tasks 4.8–4.12.
+Implement Task 4.7 only.
+
 
 ---
 
