@@ -1006,7 +1006,10 @@ Do not modify shared layouts or unrelated components.
 
 Goal:
 Allow users to register or sign in using their Google account through Supabase OAuth.
+<<<<<<< HEAD
 
+=======
+>>>>>>> 67d0c1f (None)
 Requirements:
 Connect the existing "Continue with Google" button to Supabase Google OAuth.
 Call supabase.auth.signInWithOAuth({ provider: 'google' }) using the appropriate existing Supabase client setup.
@@ -1020,14 +1023,20 @@ For an existing Google user, allow them to sign in normally.
 Display an appropriate toast notification if the OAuth process fails.
 Prevent repeated OAuth requests while an OAuth request is already in progress.
 Preserve the existing registration UI and button design.
+<<<<<<< HEAD
 
+=======
+>>>>>>> 67d0c1f (None)
 Output:
 Clicking "Continue with Google" starts the Google OAuth flow.
 New Google users receive an auth.users record and corresponding profiles record.
 Existing Google users can sign in.
 Successful authentication redirects to /dashboard.
 OAuth errors display an appropriate toast notification.
+<<<<<<< HEAD
 
+=======
+>>>>>>> 67d0c1f (None)
 Restrictions:
 Implement Task 4.10 only.
 Use the existing Supabase configuration and authentication callback route.
@@ -1036,6 +1045,10 @@ Do not modify the email/password registration flow.
 Do not modify the database schema or existing profile trigger.
 Do not implement future tasks.
 Do not modify shared layouts or unrelated components.
+<<<<<<< HEAD
+=======
+
+>>>>>>> 67d0c1f (None)
 
 ---
 
