@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { Check, Eye, EyeOff, X } from "lucide-react";
+import { Check, Eye, EyeOff, Mail, X } from "lucide-react";
+import { resendSignupEmailAction } from "@/actions/auth/resend-signup-email";
 import { signUpAction } from "@/actions/auth/sign-up";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -143,6 +144,116 @@ function FieldErrorMessage({ id, message }: FieldErrorMessageProps) {
   );
 }
 
+interface CheckInboxStateProps {
+  email: string;
+  onUseDifferentEmail: () => void;
+}
+
+const RESEND_COOLDOWN_SECONDS = 60;
+
+function CheckInboxState({ email, onUseDifferentEmail }: CheckInboxStateProps) {
+  const [cooldownSeconds, setCooldownSeconds] = useState<number>(0);
+  const [isResending, setIsResending] = useState<boolean>(false);
+  const [resendFeedback, setResendFeedback] = useState<
+    { type: "success" | "error"; message: string } | null
+  >(null);
+  const isResendInProgressRef = useRef<boolean>(false);
+  const isResendDisabled = isResending || cooldownSeconds > 0;
+
+  useEffect(() => {
+    if (cooldownSeconds <= 0) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setCooldownSeconds((currentSeconds) => currentSeconds - 1);
+    }, 1000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [cooldownSeconds]);
+
+  async function handleResendEmail(): Promise<void> {
+    if (isResendInProgressRef.current || cooldownSeconds > 0) {
+      return;
+    }
+
+    isResendInProgressRef.current = true;
+    setIsResending(true);
+    setCooldownSeconds(RESEND_COOLDOWN_SECONDS);
+    setResendFeedback(null);
+
+    try {
+      const result = await resendSignupEmailAction({ email });
+
+      if (result.success) {
+        setResendFeedback({ type: "success", message: "Email sent!" });
+        return;
+      }
+
+      setResendFeedback({ type: "error", message: result.error });
+    } finally {
+      isResendInProgressRef.current = false;
+      setIsResending(false);
+    }
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-4 text-center">
+      <div className="flex size-12 items-center justify-center rounded-full bg-[#3B82F6]/10">
+        <Mail className="size-6 text-[#3B82F6]" aria-hidden="true" />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+          Check your inbox!
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          We sent a verification link to:
+        </p>
+        <p className="text-sm font-bold text-foreground">{email}</p>
+        <p className="text-sm text-muted-foreground">
+          Click the link in the email to continue setting up your account.
+        </p>
+        <p className="text-xs text-muted-foreground">Link expires in 24 hours.</p>
+      </div>
+
+      <div className="flex w-full flex-col gap-1.5">
+        <Button
+          type="button"
+          size="lg"
+          disabled={isResendDisabled}
+          onClick={handleResendEmail}
+          className="w-full bg-[#3B82F6] text-white hover:bg-[#2563EB] disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
+        >
+          {cooldownSeconds > 0
+            ? `Resend available in ${cooldownSeconds}s`
+            : "Resend Email"}
+        </Button>
+        {resendFeedback ? (
+          <p
+            className={`text-xs font-medium ${
+              resendFeedback.type === "success" ? "text-green-500" : "text-red-500"
+            }`}
+            role="status"
+          >
+            {resendFeedback.message}
+          </p>
+        ) : null}
+      </div>
+
+      <button
+        type="button"
+        onClick={onUseDifferentEmail}
+        className="text-sm font-medium text-[#3B82F6] hover:text-[#2563EB] hover:underline"
+      >
+        ← Use a different email
+      </button>
+    </div>
+  );
+}
+
 export function RegisterForm() {
   const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -182,6 +293,22 @@ export function RegisterForm() {
     }
 
     setFieldErrors(getRegisterFormErrors(nextValues));
+  }
+
+  function handleUseDifferentEmail(): void {
+    setFullName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setIsPasswordVisible(false);
+    setIsConfirmPasswordVisible(false);
+    setHasAcceptedTerms(false);
+    setHasAttemptedSubmit(false);
+    setFieldErrors({});
+    setIsSubmitting(false);
+    setServerError(null);
+    setSubmittedEmail("");
+    isSubmittingRef.current = false;
   }
 
   async function handleSubmit(
@@ -230,7 +357,12 @@ export function RegisterForm() {
   }
 
   if (submittedEmail) {
-    return null;
+    return (
+      <CheckInboxState
+        email={submittedEmail}
+        onUseDifferentEmail={handleUseDifferentEmail}
+      />
+    );
   }
 
   return (

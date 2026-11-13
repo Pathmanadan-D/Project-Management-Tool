@@ -79,9 +79,9 @@ Never skip a priority. Never combine tasks into one prompt.
 - [x] Task 4.4 — Add client-side validation
 - [x] Task 4.5 — Create signUp server action
 - [x] Task 4.6 — Connect Register form to server action
-- [ ] Task 4.7 — Build Check Inbox state
-- [ ] Task 4.8 — Build Resend Email button with cooldown timer
-- [ ] Task 4.9 — Add "Use a different email" link
+- [x] Task 4.7 — Build Check Inbox state
+- [x] Task 4.8 — Build Resend Email button with cooldown timer
+- [x] Task 4.9 — Add "Use a different email" link
 - [ ] Task 4.10 — Implement Google OAuth registration
 - [ ] Task 4.11 — Test full registration flow
 - [ ] Task 4.12 — Extract reusable auth components

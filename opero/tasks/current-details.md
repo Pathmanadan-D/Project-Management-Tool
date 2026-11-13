@@ -898,51 +898,144 @@ Implement Task 4.7 only.
 ### Task 4.8 — Build Resend Email button with cooldown timer
 
 Goal:
-Allow users to resend the verification email with a 60 second cooldown.
+Allow users to resend the email verification link with a 60-second cooldown.
 
 Requirements:
-- Button shows: "Resend Email"
-- After clicking: button is disabled, countdown shows "Resend available in 60s"
-- Countdown ticks down each second: 60s → 59s → ... → 0s
-- At 0: button becomes active again showing "Resend Email"
-- On resend click: calls Supabase resend verification email
-- Show success feedback: "Email sent!" after resend
+
+1. Resend Email Functionality
+Display a button with the text "Resend Email" on the existing Check Inbox screen.
+When clicked, call Supabase Auth using:
+supabase.auth.resend({ type: 'signup', email: storedEmail }).
+Use the email address stored during Task 4.6.
+Use the existing Supabase client setup.
+Send a new verification email only when the user explicitly clicks "Resend Email".
+Do not automatically call the resend function when the Check Inbox screen appears.
+Do not call the signup function again when resending.
+
+2. Prevent Duplicate Verification Emails
+Task 4.6 signup action must send only the initial verification email.
+The Check Inbox screen must not trigger any additional email request automatically.
+Ensure the signup action is not accidentally executed more than once for a single registration submission.
+Ensure the resend function is not triggered automatically by useEffect or component mounting.
+One click on "Resend Email" must trigger only one resend request.
+
+3. Cooldown Timer
+When the user clicks "Resend Email", immediately disable the button.
+Start the 60-second countdown immediately after the click.
+Display the countdown as "Resend available in 60s".
+Update the countdown every second:
+60s → 59s → 58s → ... → 0s.
+When the countdown reaches 0:
+Enable the button again.
+Display "Resend Email".
+The countdown must work independently of the resend request result.
+Ensure the timer is cleaned up properly to prevent duplicate intervals or memory leaks.
+
+4. Success and Error Feedback
+Display "Email sent!" only when Supabase successfully completes the resend request.
+If the resend request fails, display an appropriate error message.
+Do not display a success message when the request fails.
+Handle loading and error states without breaking the countdown.
+Prevent additional resend requests while the button is disabled or a resend request is in progress.
+
+5. UI Requirements
+Keep the existing Check Inbox screen and its design unchanged.
+Keep the existing "Resend Email" button placement and styling.
+Display success and error feedback clearly without disrupting the layout.
 
 Output:
-Resend button works with 60 second cooldown. Countdown displays correctly.
+Creating an account sends exactly one initial verification email.
+Opening the Check Inbox screen does not send another email.
+Clicking "Resend Email" sends exactly one additional verification email.
+The 60-second countdown starts immediately after clicking.
+Countdown updates correctly every second.
+Button becomes active again when the countdown reaches 0.
+Success and error messages display correctly.
+No duplicate email requests occur.
+
+Restrictions:
+Implement Task 4.8 only.
+Use the existing Supabase client setup and stored registration email.
+Do not unnecessarily modify the Task 4.6 signup action.
+Do not modify the existing registration flow unless a change is necessary to prevent duplicate signup requests.
+Do not implement the "Use a different email" functionality (Task 4.9).
+Do not implement Google OAuth or other future tasks.
+Do not modify shared layouts or unrelated components.
+Do not rewrite working components unnecessarily.
 
 ---
 
 ### Task 4.9 — Add "Use a different email" link
 
 Goal:
-Allow the user to go back to the registration form from the Check Inbox state.
+Allow users to return to the registration form from the Check Inbox state and register using a different email address.
 
 Requirements:
-- Link text: "← Use a different email"
-- Click → swaps card back to the registration form (State 1)
-- Form is reset (all fields cleared)
-- No page navigation
+Display a link with the exact text: "← Use a different email".
+When clicked, switch the Auth Card from the Check Inbox state back to the registration form (State 1).
+Reset the registration form completely:
+Clear Full Name.
+Clear Email.
+Clear Password.
+Clear Confirm Password.
+Uncheck the Terms checkbox.
+Clear password strength indicator.
+Clear password match indicator.
+Clear validation and server error messages.
+Reset any previous registration success or submission state.
+Allow the user to enter new registration details.
+Keep the user on the same page without navigation or page reload.
+Preserve the existing Auth Layout and design.
 
 Output:
-User can return to the registration form from the Check Inbox state
+Clicking "← Use a different email" returns the user to the registration form.
+All registration fields and related indicators are reset.
+The user can enter new details and register again.
+No page navigation occurs.
+
+Restrictions:
+Implement Task 4.9 only.
+Do not modify the Supabase resend email functionality (Task 4.8).
+Do not remove or change the Check Inbox screen unnecessarily.
+Do not implement future tasks.
+Do not modify shared layouts or unrelated components.
 
 ---
 
 ### Task 4.10 — Implement Google OAuth registration
 
 Goal:
-Allow users to register using their Google account.
+Allow users to register or sign in using their Google account through Supabase OAuth.
 
 Requirements:
-- "Continue with Google" button triggers Supabase OAuth flow
-- Call `supabase.auth.signInWithOAuth({ provider: 'google' })`
-- On success: Supabase creates auth.users row and trigger creates profiles row
-- Redirect to `/dashboard` after successful Google registration
-- Handle errors: show toast if OAuth fails
+Connect the existing "Continue with Google" button to Supabase Google OAuth.
+Call supabase.auth.signInWithOAuth({ provider: 'google' }) using the appropriate existing Supabase client setup.
+Set the OAuth redirect URL to the existing authentication callback route.
+Ensure the callback route handles the Google OAuth response and establishes the user's session.
+After successful authentication, redirect the user to /dashboard.
+For a new Google user:
+Supabase creates a new record in auth.users.
+The existing database trigger automatically creates the corresponding profiles row.
+For an existing Google user, allow them to sign in normally.
+Display an appropriate toast notification if the OAuth process fails.
+Prevent repeated OAuth requests while an OAuth request is already in progress.
+Preserve the existing registration UI and button design.
 
 Output:
-Users can register with Google. Account is created. Redirect to dashboard works.
+Clicking "Continue with Google" starts the Google OAuth flow.
+New Google users receive an auth.users record and corresponding profiles record.
+Existing Google users can sign in.
+Successful authentication redirects to /dashboard.
+OAuth errors display an appropriate toast notification.
+
+Restrictions:
+Implement Task 4.10 only.
+Use the existing Supabase configuration and authentication callback route.
+Do not create duplicate Supabase clients or unnecessary authentication routes.
+Do not modify the email/password registration flow.
+Do not modify the database schema or existing profile trigger.
+Do not implement future tasks.
+Do not modify shared layouts or unrelated components.
 
 ---
 
