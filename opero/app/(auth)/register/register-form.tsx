@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Check, Eye, EyeOff, Mail, X } from "lucide-react";
 import { resendSignupEmailAction } from "@/actions/auth/resend-signup-email";
 import { signUpAction } from "@/actions/auth/sign-up";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -266,9 +267,13 @@ export function RegisterForm() {
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState<boolean>(false);
   const [fieldErrors, setFieldErrors] = useState<RegisterFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isGoogleAuthInProgress, setIsGoogleAuthInProgress] =
+    useState<boolean>(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [submittedEmail, setSubmittedEmail] = useState<string>("");
+  const [googleErrorToast, setGoogleErrorToast] = useState<string | null>(null);
   const isSubmittingRef = useRef<boolean>(false);
+  const isGoogleAuthInProgressRef = useRef<boolean>(false);
   const passwordStrength =
     password.length > 0 ? getPasswordStrength(password) : null;
   const passwordStrengthPresentation = passwordStrength
@@ -276,6 +281,42 @@ export function RegisterForm() {
     : null;
   const hasStartedConfirmPassword = confirmPassword.length > 0;
   const doPasswordsMatch = password === confirmPassword;
+
+  useEffect(() => {
+    const hasGoogleError =
+      new URLSearchParams(window.location.search).get("error") === "google" ||
+      window.sessionStorage.getItem("opero-google-auth-error") === "1";
+
+    if (!hasGoogleError) {
+      return;
+    }
+
+    window.sessionStorage.setItem("opero-google-auth-error", "1");
+    setGoogleErrorToast("Google sign-in failed. Please try again.");
+
+    const timeoutId = window.setTimeout(() => {
+      window.sessionStorage.removeItem("opero-google-auth-error");
+      window.history.replaceState(null, "", "/register");
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!googleErrorToast) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setGoogleErrorToast(null);
+    }, 4000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [googleErrorToast]);
 
   function getCurrentValues(): RegisterFormValues {
     return {
@@ -356,6 +397,37 @@ export function RegisterForm() {
     }
   }
 
+  async function handleGoogleSignUp(): Promise<void> {
+    if (isGoogleAuthInProgressRef.current) {
+      return;
+    }
+
+    isGoogleAuthInProgressRef.current = true;
+    setIsGoogleAuthInProgress(true);
+
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+        },
+      });
+
+      if (error) {
+        console.error("handleGoogleSignUp error:", error);
+        setGoogleErrorToast("Google sign-in failed. Please try again.");
+        isGoogleAuthInProgressRef.current = false;
+        setIsGoogleAuthInProgress(false);
+      }
+    } catch (error) {
+      console.error("handleGoogleSignUp error:", error);
+      setGoogleErrorToast("Google sign-in failed. Please try again.");
+      isGoogleAuthInProgressRef.current = false;
+      setIsGoogleAuthInProgress(false);
+    }
+  }
+
   if (submittedEmail) {
     return (
       <CheckInboxState
@@ -366,6 +438,15 @@ export function RegisterForm() {
   }
 
   return (
+    <>
+    {googleErrorToast ? (
+      <div
+        role="status"
+        className="fixed top-20 left-1/2 z-50 -translate-x-1/2 rounded-lg border border-red-200 bg-white px-4 py-3 text-sm font-medium text-red-600 shadow-sm dark:border-red-900 dark:bg-[#1E293B] dark:text-red-400"
+      >
+        {googleErrorToast}
+      </div>
+    ) : null}
     <form
       className="flex flex-col gap-4"
       noValidate
@@ -604,7 +685,16 @@ export function RegisterForm() {
         <div className="h-px flex-1 bg-border" />
       </div>
 
-      <Button type="button" variant="outline" size="lg" className="w-full">
+      <Button
+        type="button"
+        variant="outline"
+        size="lg"
+        className="w-full"
+        disabled={isGoogleAuthInProgress}
+        onClick={() => {
+          void handleGoogleSignUp();
+        }}
+      >
         <GoogleIcon />
         Continue with Google
       </Button>
@@ -619,6 +709,7 @@ export function RegisterForm() {
         </Link>
       </p>
     </form>
+    </>
   );
 }
 

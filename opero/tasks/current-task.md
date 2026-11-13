@@ -82,7 +82,7 @@ Never skip a priority. Never combine tasks into one prompt.
 - [x] Task 4.7 — Build Check Inbox state
 - [x] Task 4.8 — Build Resend Email button with cooldown timer
 - [x] Task 4.9 — Add "Use a different email" link
-- [ ] Task 4.10 — Implement Google OAuth registration
+- [x] Task 4.10 — Implement Google OAuth registration
 - [ ] Task 4.11 — Test full registration flow
 - [ ] Task 4.12 — Extract reusable auth components
 
