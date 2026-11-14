@@ -363,10 +363,6 @@ export function RegisterForm() {
 
     setServerError(null);
 
-    if (!hasAcceptedTerms) {
-      return;
-    }
-
     setHasAttemptedSubmit(true);
     const nextFieldErrors = getRegisterFormErrors(getCurrentValues());
     setFieldErrors(nextFieldErrors);
@@ -665,7 +661,7 @@ export function RegisterForm() {
         <Button
           type="submit"
           size="lg"
-          disabled={!hasAcceptedTerms || isSubmitting}
+          disabled={isSubmitting}
           className="w-full bg-[#3B82F6] text-white hover:bg-[#2563EB] disabled:bg-muted disabled:text-muted-foreground disabled:opacity-100"
         >
           {isSubmitting ? "Creating account..." : "Create Account"}

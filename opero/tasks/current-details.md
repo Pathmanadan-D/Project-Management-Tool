@@ -1039,19 +1039,83 @@ Do not modify shared layouts or unrelated components.
 ### Task 4.11 — Test full registration flow
 
 Goal:
-Confirm the complete registration flow works end to end.
+Verify that the complete Opero registration and authentication flow works correctly from registration to successful dashboard access.
 
-Test cases:
-- Register with valid details → Check Inbox state appears
-- Verification email arrives in inbox
-- Click verification link → account verified
-- Login with registered credentials → redirects to dashboard
-- Register with already used email → correct error shown
-- Submit empty form → validation errors shown
-- Google registration → account created → dashboard
+Requirements:
+1. Email/Password Registration
+Register using valid details (Full Name, Email, Password, Confirm Password, and Terms acceptance).
+Confirm that client-side validation passes.
+Confirm that the registration request is successfully processed by the existing Supabase signUp server action.
+Verify that the Check Inbox state appears after successful registration.
+Confirm that the submitted email address is displayed correctly.
+Verify that a corresponding user record is created in Supabase Authentication.
+Verify that the corresponding profile record is created in the public.profiles table.
+
+2. Email Verification
+Confirm that the verification email arrives at the registered email address.
+Open the verification email and click its verification link.
+Verify that the email confirmation process completes successfully.
+Confirm that the user is redirected to the configured verification destination.
+Verify that the user's email confirmation status is updated in Supabase Authentication.
+
+3. Login After Verification
+Navigate to the Login page after successful email verification.
+Log in using the registered email address and password.
+Confirm that authentication succeeds.
+Verify that the user is redirected to /dashboard.
+Confirm that the authenticated session is maintained correctly.
+
+4. Duplicate Email Registration
+Attempt to register using an email address that is already registered.
+Confirm that registration is rejected.
+Verify that the exact error message is displayed: An account with this email already exists.
+Confirm that no duplicate profile record is created.
+
+5. Empty Form Validation
+Attempt to submit the registration form with all fields empty.
+Confirm that submission is blocked.
+Verify that all applicable validation errors appear.
+Confirm that invalid fields display the expected red borders and error messages.
+
+6. Google OAuth Registration
+Click the existing "Continue with Google" button.
+Complete Google authentication using a Google account that has not previously registered with Opero.
+Confirm that Supabase successfully creates the authentication user.
+Verify that the existing database trigger creates the corresponding profile record.
+Confirm that the user is redirected to /dashboard.
+Verify that the authenticated session is established correctly.
+
+7. Regression Testing
+Confirm that the password strength indicator still works correctly.
+Confirm that the confirm-password match indicator still works correctly.
+Confirm that client-side validation still works correctly.
+Confirm that the Check Inbox screen displays the correct registration email.
+Confirm that the Resend Email button and its 60-second cooldown work correctly.
+Confirm that the "Use a different email" link returns to the registration form and resets its fields.
+Confirm that the existing authentication UI and shared Auth Layout remain intact.
 
 Output:
-All registration test cases pass. Flow works correctly end to end.
+All applicable registration and authentication test cases are executed.
+Each test case is reported as PASS, FAIL, or BLOCKED.
+Failed test cases include the observed issue and relevant error details.
+Supabase user and profile records are verified where applicable.
+Registration, email verification, login, and Google OAuth flows work correctly.
+Existing registration features continue to work without regression.
+A final test summary identifies whether the registration module is ready for approval.
+
+Restrictions:
+This task is for testing and verification only.
+Do not modify application code, UI components, database schema, triggers, or RLS policies.
+Do not change Supabase authentication settings or OAuth configuration.
+Do not bypass existing client-side validation.
+Do not create duplicate users or unnecessary test records.
+Do not expose passwords, access tokens, refresh tokens, or other sensitive authentication data in test reports.
+Do not modify the shared Auth Layout or unrelated files.
+If a test fails, report the issue and the likely cause without automatically fixing it.
+If a test cannot be performed because of missing configuration, external access, or unavailable credentials, report it as BLOCKED rather than PASS.
+Do not implement Task 4.12 or any future tasks.
+Implement Task 4.11 only.
+
 
 ---
 
